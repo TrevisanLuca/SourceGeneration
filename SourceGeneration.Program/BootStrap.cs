@@ -3,7 +3,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace SourceGeneration.Program;
 
-public static class BootStrap
+public static partial class BootStrap
 {
     public static IHost Build()
     {
@@ -13,6 +13,8 @@ public static class BootStrap
         builder.Services.AddSingleton<IRandomStringGenerator, RandomStringGenerator>();
         builder.Services.AddSingleton<IRunner, Runner>();
 
+        RegisterMetricsDecorators(builder.Services);
+        
         return builder.Build();
     }
 }

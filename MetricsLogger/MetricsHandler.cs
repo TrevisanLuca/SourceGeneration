@@ -2,7 +2,7 @@
 
 namespace MetricsLogger;
 
-public static class MetricsLogger
+public static class MetricsHandler
 {
     public static async Task DoWithMetrics(string logValues, string methodDescription, Func<Task> func)
     {
