@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneration.Program", "SourceGeneration.Program\SourceGeneration.Program.csproj", "{2940E9B7-740C-4D1E-A0C9-A035B091BCC5}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsLogger", "MetricsLogger\MetricsLogger.csproj", "{9A726925-43DE-4B35-9E6E-C0BF3A1CE045}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneration.Generator", "SourceGeneration.Generator\SourceGeneration.Generator.csproj", "{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2940E9B7-740C-4D1E-A0C9-A035B091BCC5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2940E9B7-740C-4D1E-A0C9-A035B091BCC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2940E9B7-740C-4D1E-A0C9-A035B091BCC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2940E9B7-740C-4D1E-A0C9-A035B091BCC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A726925-43DE-4B35-9E6E-C0BF3A1CE045}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A726925-43DE-4B35-9E6E-C0BF3A1CE045}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A726925-43DE-4B35-9E6E-C0BF3A1CE045}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A726925-43DE-4B35-9E6E-C0BF3A1CE045}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
