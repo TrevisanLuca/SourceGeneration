@@ -6,9 +6,11 @@ public static class GeneratorHelper
     public const string AttributeName = "MetricsDecoratorAttribute";
     
     public const string MetricsAttributeDeclaration = $"""
+    using System;
+    
     namespace {Namespace};
     
-    [System.AttributeUsage(System.AttributeTargets.Class)]
-    public class {AttributeName} : System.Attribute;
+    [AttributeUsage(AttributeTargets.Class)]
+    public class {AttributeName} : Attribute;
     """;  
 }
