@@ -1,3 +1,5 @@
+using SourceGeneration.Core;
+
 namespace SourceGeneration.Program;
 
 public interface IRunner

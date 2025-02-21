@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MetricsLogger", "MetricsLog
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneration.Generator", "SourceGeneration.Generator\SourceGeneration.Generator.csproj", "{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SourceGeneration.Core", "SourceGeneration.Core\SourceGeneration.Core.csproj", "{39D7D99E-BDBD-4F10-B558-DCE226E24017}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B37C5D64-7A62-4FD4-9CD9-7E633A0611E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39D7D99E-BDBD-4F10-B558-DCE226E24017}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39D7D99E-BDBD-4F10-B558-DCE226E24017}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39D7D99E-BDBD-4F10-B558-DCE226E24017}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39D7D99E-BDBD-4F10-B558-DCE226E24017}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

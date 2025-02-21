@@ -1,8 +1,7 @@
-using System.Collections.Immutable;
 using System.Text;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using SourceGeneration.Core;
 using RegistrationData = (string interfaceName, string className);
 
 namespace SourceGeneration.Generator;
@@ -10,45 +9,82 @@ namespace SourceGeneration.Generator;
 [Generator]
 public class MetricsDecoratorGenerator : IIncrementalGenerator
 {
+    private static IEnumerable<INamedTypeSymbol> GetAllTypes(INamespaceSymbol namespaceSymbol)
+    {
+        foreach (var member in namespaceSymbol.GetMembers())
+        {
+            if (member is INamespaceSymbol ns)
+            {
+                foreach (var type in GetAllTypes(ns))
+                {
+                    yield return type;
+                }
+            }
+            else if (member is INamedTypeSymbol type)
+            {
+                yield return type;
+            }
+        }
+    }
+    
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
-        context.RegisterPostInitializationOutput(ctx => ctx.AddSource(
-            $"{GeneratorHelper.AttributeName}.g.cs",
-            SourceText.From(GeneratorHelper.MetricsAttributeDeclaration, Encoding.UTF8)));
+        //deprecated
+        // context.RegisterPostInitializationOutput(ctx => ctx.AddSource(
+        //     $"{GeneratorHelper.AttributeName}.g.cs",
+        //     SourceText.From(GeneratorHelper.MetricsAttributeDeclaration, Encoding.UTF8)));
+        IncrementalValueProvider<Compilation> compilationProvider = context.CompilationProvider;
 
-        var provider = context.SyntaxProvider
-            .ForAttributeWithMetadataName(
-                $"{GeneratorHelper.Namespace}.{GeneratorHelper.AttributeName}",
-                predicate: static (s, _) => true,
-                transform: static (ctx, _) => ctx.TargetNode as ClassDeclarationSyntax)
-            .Where(static m => m is not null);
+        // Extract classes with MyAttribute from referenced assemblies
+        var classesWithAttribute = compilationProvider.Select((compilation, cancellationToken) =>
+        {
+            // Look through all referenced assemblies
+            var results = new List<(INamedTypeSymbol symbol, AttributeData attribute)>();
 
-        context.RegisterSourceOutput(context.CompilationProvider.Combine(provider.Collect()),
-            ((ctx, t) => GenerateCode(ctx, t.Left, t.Right!)));
+            // Include the main compilation assembly and all referenced assemblies
+            foreach (var assembly in compilation.Assembly.Modules.SelectMany(m => m.ReferencedAssemblySymbols).Append(compilation.Assembly))
+            {
+                // Get all types in the assembly
+                var types = GetAllTypes(assembly.GlobalNamespace);
+                foreach (var type in types)
+                {
+                    var attribute = type.GetAttributes()
+                        .FirstOrDefault(attr => attr.AttributeClass?.Name == typeof(WithMetricsAttribute).Name &&
+                                                attr.AttributeClass?.ContainingNamespace.ToString() == typeof(WithMetricsAttribute).Namespace);
+                    if (attribute != null)
+                    {
+                        results.Add((type, attribute));
+                    }
+                }
+            }
+
+            return results;
+        });
+        
+        // var provider = context.CompilationProvider
+        //     .ForAttributeWithMetadataName(
+        //         typeof(WithMetricsAttribute).FullName!,
+        //         predicate: static (_, _) => true,
+        //         transform: static (ctx, _) => ctx.TargetNode as ClassDeclarationSyntax)
+        //     .Where(static m => m is not null);
+
+        context.RegisterSourceOutput(classesWithAttribute,
+            ((ctx, t) => GenerateCode(ctx, t)));
     }
 
-    private void GenerateCode(SourceProductionContext context, Compilation compilation, ImmutableArray<ClassDeclarationSyntax> classDeclarations)
+    private static void GenerateCode(SourceProductionContext context, List<(INamedTypeSymbol symbol, AttributeData data)> list)
     {
         var registrationTargets = new List<RegistrationData>();
         // Go through all filtered class declarations.
-        foreach (var classDeclarationSyntax in classDeclarations)
+        foreach (var (symbol, attribute) in list)
         {
-            // We need to get semantic model of the class to retrieve metadata.
-            var semanticModel = compilation.GetSemanticModel(classDeclarationSyntax.SyntaxTree);
-
-            // Symbols allow us to get the compile-time information.
-            if (semanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol classSymbol)
-                continue;
-
-            var namespaceName = classSymbol.ContainingNamespace.ToDisplayString();
-
             // 'Identifier' means the token of the node. Get class name from the syntax node.
-            var className = classDeclarationSyntax.Identifier.Text;
+            var className = symbol.Name;
             var decoratorName = $"{className}Decorator";
             const string decorateeName = "decoratee";
 
             // Go through all class members with a particular type (property) to generate method lines.
-            var mainInterface = classSymbol.Interfaces.First();
+            var mainInterface = symbol.Interfaces.First();
             var interfaceName = mainInterface.ToDisplayString();
             var methods = mainInterface.GetMembers().OfType<IMethodSymbol>()
                 .Select(m => $"""

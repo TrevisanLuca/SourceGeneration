@@ -1,4 +1,4 @@
-namespace SourceGeneration.Program;
+namespace SourceGeneration.Core;
 
 public interface IWorker
 {
@@ -6,7 +6,7 @@ public interface IWorker
     Task WorkTaskWithParameters(string myValue);
 }
 
-[MetricsDecorator]
+[WithMetrics]
 public class Worker : IWorker
 {
     private readonly Random _rnd = new();
@@ -14,12 +14,12 @@ public class Worker : IWorker
     public async Task WorkTask()
     {
         await Task.Delay(_rnd.Next(100, 1000));
-        Console.WriteLine($"{nameof(WorkTask)} done");
+        //Console.WriteLine($"{nameof(WorkTask)} done");
     }
 
     public async Task WorkTaskWithParameters(string myValue)
     {
         await Task.Delay(_rnd.Next(100, 1000));
-        Console.WriteLine($"{nameof(WorkTask)} done: {myValue}");
+        //Console.WriteLine($"{nameof(WorkTask)} done: {myValue}");
     }
 }

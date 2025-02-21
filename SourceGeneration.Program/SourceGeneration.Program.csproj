@@ -9,6 +9,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\MetricsLogger\MetricsLogger.csproj" />
+      <ProjectReference Include="..\SourceGeneration.Core\SourceGeneration.Core.csproj" />
       <ProjectReference Include="..\SourceGeneration.Generator\SourceGeneration.Generator.csproj" OutputItemType="Analyzer" ReferenceOutputAssembly="false" />
     </ItemGroup>
 
